@@ -7,8 +7,8 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.String(20), default='user')  # 'user' or 'admin'
-    is_accepted = db.Column(db.Boolean, default=None)  # None = belum, True/False
+    role = db.Column(db.String(20), default='user')
+    is_accepted = db.Column(db.Boolean, default=None)
 
 class Formulir(db.Model):
     id = db.Column(db.Integer, primary_key=True)
