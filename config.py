@@ -1,4 +1,6 @@
+import os
+
 class Config:
-    SECRET_KEY = 'ini_rahasia_ubah_di_produksi'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///ppdb.db'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-here'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
