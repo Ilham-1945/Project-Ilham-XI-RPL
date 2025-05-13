@@ -24,7 +24,7 @@
                                 </tr>
                                 <tr>
                                     <th>Nilai</th>
-                                    <td>{{ current_user.formulir.nilai }}</td>
+                                    <td>{{ "%.2f"|format(current_user.formulir.nilai) }}</td>
                                 </tr>
                                 <tr>
                                     <th>Status</th>
@@ -40,15 +40,14 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="mt-3">
-                            <a href="{{ url_for('routes.main') }}" class="btn btn-secondary">Back to Main</a>
-                        </div>
                     {% else %}
                         <div class="alert alert-warning">
                             No form submission found. Please submit your form first.
                         </div>
-                        <a href="{{ url_for('routes.formulir') }}" class="btn btn-primary">Submit Form</a>
                     {% endif %}
+                    <div class="mt-3">
+                        <a href="{{ url_for('routes.main') }}" class="btn btn-secondary">Back to Main</a>
+                    </div>
                 </div>
             </div>
         </div>

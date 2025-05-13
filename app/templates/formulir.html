@@ -19,7 +19,7 @@
                         {% endif %}
                     {% endwith %}
 
-                    <form method="POST" action="{{ url_for('routes.submit_formulir') }}">
+                    <form method="POST" action="{{ url_for('routes.formulir') }}">
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama Lengkap</label>
                             <input type="text" class="form-control" id="nama" name="nama" required>
@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Submit Formulir</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
                             <a href="{{ url_for('routes.main') }}" class="btn btn-secondary">Kembali</a>
                         </div>
                     </form>

@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import db, User, Formulir
 
-# Create Blueprint instead of Flask app instance
 routes = Blueprint('routes', __name__)
 
 @routes.route('/')
@@ -11,7 +10,6 @@ def home():
 
 @routes.route('/register', methods=['GET', 'POST'])
 def register():
-    # Redirect if user is already logged in
     if current_user.is_authenticated:
         return redirect(url_for('routes.main'))
 
@@ -39,21 +37,20 @@ def register():
             
         except Exception as e:
             db.session.rollback()
-            flash('Registration failed. Please try again.', 'error')
+            flash(f'Registration failed: {str(e)}', 'error')
             return redirect(url_for('routes.register'))
 
     return render_template('register.html')
 
 @routes.route('/login', methods=['GET', 'POST']) 
 def login():
-    # Redirect if user is already logged in
     if current_user.is_authenticated:
         return redirect(url_for('routes.main'))
 
     if request.method == 'POST':
         try:
-            username = request.form['username']
-            password = request.form['password']
+            username = request.form.get('username')
+            password = request.form.get('password')
             
             if not username or not password:
                 flash('Username and password are required', 'error')
@@ -68,7 +65,7 @@ def login():
             flash('Invalid username or password', 'error')
             
         except Exception as e:
-            flash('Login failed. Please try again.', 'error')
+            flash(f'Login failed: {str(e)}', 'error')
             
     return render_template('login.html')
 
@@ -77,13 +74,29 @@ def login():
 def main():
     return render_template('main.html')
 
-@routes.route('/formulir', methods=['GET'])
+@routes.route('/formulir', methods=['GET', 'POST'])
 @login_required
 def formulir():
-    # Check if user already has a form
     if current_user.formulir:
         flash('You have already submitted a form', 'warning')
         return redirect(url_for('routes.main'))
+
+    if request.method == 'POST':
+        try:
+            formulir = Formulir(
+                user_id=current_user.id,
+                nama=request.form['nama'],
+                alamat=request.form['alamat'],
+                nilai=float(request.form['nilai'])
+            )
+            db.session.add(formulir)
+            db.session.commit()
+            flash('Form submitted successfully', 'success')
+            return redirect(url_for('routes.main'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error submitting form: {str(e)}', 'error')
+    
     return render_template('formulir.html')
 
 @routes.route('/view-formulir')
@@ -98,5 +111,5 @@ def view_formulir():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out', 'info')
+    flash('You have been logged out successfully', 'info')
     return redirect(url_for('routes.login'))

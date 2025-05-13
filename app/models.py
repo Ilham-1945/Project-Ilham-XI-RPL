@@ -10,8 +10,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(20), default='user')
     is_accepted = db.Column(db.Boolean, default=None)
-    # Add relationship to Formulir
-    formulir = db.relationship('Formulir', backref='user', lazy=True)
+    # Change relationship to uselist=False for one-to-one
+    formulir = db.relationship('Formulir', backref='user', lazy=True, uselist=False)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
