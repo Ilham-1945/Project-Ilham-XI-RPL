@@ -18,6 +18,9 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+    
+    def is_admin(self):
+        return self.role == 'admin'
 
 class Formulir(db.Model):
     id = db.Column(db.Integer, primary_key=True)
