@@ -10,7 +10,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(20), default='user')
     is_accepted = db.Column(db.Boolean, default=None)
-    # Change relationship to uselist=False for one-to-one
     formulir = db.relationship('Formulir', backref='user', lazy=True, uselist=False)
 
     def set_password(self, password):
@@ -18,9 +17,6 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
-    
-    def is_admin(self):
-        return self.role == 'admin'
 
 class Formulir(db.Model):
     id = db.Column(db.Integer, primary_key=True)

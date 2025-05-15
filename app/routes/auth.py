@@ -1,0 +1,151 @@
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_login import login_user, logout_user, login_required, current_user
+from app.models import User, Formulir, db
+from functools import wraps
+
+auth = Blueprint('auth', __name__)
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.role != 'admin':
+            flash('Admin access required', 'error')
+            return redirect(url_for('auth.login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@auth.route('/')
+def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('auth.dashboard'))
+    return render_template('base.html')
+
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('auth.dashboard'))
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        user = User.query.filter_by(username=username).first()
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for('auth.dashboard'))
+        
+        flash('Invalid username or password', 'error')
+    
+    return render_template('auth/login.html')
+
+@auth.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('auth.dashboard'))
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists', 'error')
+            return redirect(url_for('auth.register'))
+        
+        user = User(username=username, role='user')
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        
+        flash('Registration successful', 'success')
+        return redirect(url_for('auth.login'))
+    
+    return render_template('auth/register.html')
+
+@auth.route('/dashboard')
+@login_required
+def dashboard():
+    if current_user.role == 'admin':
+        users = User.query.filter_by(role='user').all()
+        pending_forms = Formulir.query.join(User).filter(User.is_accepted.is_(None)).all()
+        accepted_forms = Formulir.query.join(User).filter(User.is_accepted.is_(True)).all()
+        rejected_forms = Formulir.query.join(User).filter(User.is_accepted.is_(False)).all()
+        
+        return render_template('auth/dashboard.html',
+                            users=users,
+                            pending_forms=pending_forms,
+                            accepted_forms=accepted_forms,
+                            rejected_forms=rejected_forms)
+    return render_template('auth/dashboard.html')
+
+@auth.route('/formulir', methods=['GET', 'POST'])
+@login_required
+def formulir():
+    if current_user.role == 'admin':
+        flash('Admins cannot submit forms', 'error')
+        return redirect(url_for('auth.dashboard'))
+
+    if current_user.formulir:
+        flash('You have already submitted a form', 'warning')
+        return redirect(url_for('auth.dashboard'))
+
+    if request.method == 'POST':
+        try:
+            formulir = Formulir(
+                user_id=current_user.id,
+                nama=request.form.get('nama'),
+                alamat=request.form.get('alamat'),
+                nilai=float(request.form.get('nilai', 0))
+            )
+            db.session.add(formulir)
+            db.session.commit()
+            flash('Form submitted successfully', 'success')
+            return redirect(url_for('auth.dashboard'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error submitting form: {str(e)}', 'error')
+    
+    return render_template('auth/formulir.html')
+
+@auth.route('/view-formulir')
+@login_required
+def view_formulir():
+    if current_user.role == 'admin':
+        return redirect(url_for('auth.dashboard'))
+        
+    if not current_user.formulir:
+        flash('You have not submitted any form yet', 'warning')
+        return redirect(url_for('auth.dashboard'))
+    
+    return render_template('auth/view_formulir.html')
+
+@auth.route('/review/<int:user_id>', methods=['POST'])
+@login_required
+@admin_required
+def review_application(user_id):
+    try:
+        user = User.query.get_or_404(user_id)
+        action = request.form.get('action')
+        
+        if action == 'accept':
+            user.is_accepted = True
+            flash(f'Application for {user.username} has been accepted', 'success')
+        elif action == 'reject':
+            user.is_accepted = False
+            flash(f'Application for {user.username} has been rejected', 'warning')
+        else:
+            flash('Invalid action', 'error')
+            return redirect(url_for('auth.dashboard'))
+        
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error processing application: {str(e)}', 'error')
+    
+    return redirect(url_for('auth.dashboard'))
+
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Logged out successfully', 'info')
+    return redirect(url_for('auth.login'))
