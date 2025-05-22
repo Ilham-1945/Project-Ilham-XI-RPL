@@ -143,16 +143,19 @@ def formulir():
 
     return render_template('auth/formulir.html')
 
-@auth.route('/view-formulir')
+@auth.route('/formulir/view/<int:user_id>')
 @login_required
-def view_formulir():
-    if current_user.role == 'admin':
-        return redirect(url_for('auth.dashboard'))
-        
-    if not current_user.formulir:
-        flash('You have not submitted any form yet', 'warning')
-        return redirect(url_for('auth.dashboard'))
-    formulir = current_user.formulir  
+def view_formulir(user_id=None):
+    if user_id and current_user.role == 'admin':
+        # Admin viewing specific user's form
+        formulir = Formulir.query.filter_by(user_id=user_id).first_or_404()
+    else:
+        # User viewing their own form
+        formulir = current_user.formulir
+        if not formulir:
+            flash('Anda belum mengisi formulir', 'warning')
+            return redirect(url_for('auth.formulir'))
+            
     return render_template('auth/view_formulir.html', data=formulir)
 
 @auth.route('/uploads/<path:filename>')
