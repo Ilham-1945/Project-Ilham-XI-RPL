@@ -22,7 +22,15 @@ class Formulir(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     nama = db.Column(db.String(100), nullable=False)
+    tempat_lahir = db.Column(db.String(100), nullable=False)
+    tanggal_lahir = db.Column(db.Date, nullable=False)
     alamat = db.Column(db.String(200), nullable=False)
-    nilai = db.Column(db.Float, default=0.0)
+    asal_sekolah = db.Column(db.String(100), nullable=False)
+    kelamin = db.Column(db.String(1), nullable=False)  # 'L' atau 'P'
+    agama = db.Column(db.String(20), nullable=False)
+    jurusan = db.Column(db.String(10), nullable=False)
+    nilai_rata = db.Column(db.Float, default=0.0)
+    status = db.Column(db.String(20), default='pending')  # Add this line
+    ijazah_filename = db.Column(db.String(200))  # nama file ijazah yang diupload
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())

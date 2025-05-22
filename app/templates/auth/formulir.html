@@ -14,7 +14,7 @@
                 <h5 class="mb-3">Data Pribadi</h5>
                 <div class="mb-3">
                     <label for="nama" class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control" id="nama" name="nama" required>
+                    <input type="text" class="form-control" id="nama" name="nama" value="{{ current_user.username }}" required>
                 </div>
 
                 <div class="row mb-3">
@@ -23,9 +23,8 @@
                         <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="tahun_lahir" class="form-label">Tahun Lahir</label>
-                        <input type="number" class="form-control" id="tahun_lahir" name="tahun_lahir" 
-                               min="1990" max="2010" required>
+                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                        <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required>
                     </div>
                 </div>
 
@@ -69,8 +68,8 @@
                     <select class="form-select" id="jurusan" name="jurusan" required>
                         <option value="">Pilih Jurusan</option>
                         <option value="RPL">Rekayasa Perangkat Lunak</option>
-                        <option value="TKJ">Teknik Komputer dan Jaringan</option>
-                        <option value="MM">Multimedia</option>
+                        <option value="TKJ">Teknik Sepeda Motor</option>
+                        <option value="MM">Hotel</option>
                     </select>
                 </div>
 

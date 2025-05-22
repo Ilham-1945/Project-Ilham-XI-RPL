@@ -5,71 +5,114 @@
 {% block content %}
 <div class="container mt-4">
     {% if current_user.role == 'admin' %}
-        <!-- Admin View -->
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Pending Applications</h4>
-            </div>
-            <div class="card-body">
-                {% if pending_forms %}
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Name</th>
-                                <th>Score</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for form in pending_forms %}
-                            <tr>
-                                <td>{{ form.user.username }}</td>
-                                <td>{{ form.nama }}</td>
-                                <td>{{ form.nilai }}</td>
-                                <td>
-                                    <form action="{{ url_for('auth.review_application', user_id=form.user.id) }}" method="POST" class="d-inline">
-                                        <input type="hidden" name="action" value="accept">
-                                        <button class="btn btn-success btn-sm">Accept</button>
-                                    </form>
-                                    <form action="{{ url_for('auth.review_application', user_id=form.user.id) }}" method="POST" class="d-inline ms-1">
-                                        <input type="hidden" name="action" value="reject">
-                                        <button class="btn btn-danger btn-sm">Reject</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                    <p class="text-muted">No pending applications</p>
-                {% endif %}
-            </div>
-        </div>
+    <!-- Admin View -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Pendaftaran Menunggu Persetujuan</h4>
+    </div>
+    <div class="card-body">
+        {% if pending_forms %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nama Lengkap</th>
+                        <th>Nilai Rata-rata</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in pending_forms %}
+                    <tr>
+                        <td>{{ form.nama }}</td>
+                        <td>{{ form.nilai_rata }}</td>
+                        <td>
+                            <form action="{{ url_for('auth.review_application', user_id=form.user.id) }}" method="POST" class="d-inline">
+                                <input type="hidden" name="action" value="accept">
+                                <button class="btn btn-success btn-sm">Terima</button>
+                            </form>
+                            <form action="{{ url_for('auth.review_application', user_id=form.user.id) }}" method="POST" class="d-inline ms-1">
+                                <input type="hidden" name="action" value="reject">
+                                <button class="btn btn-danger btn-sm">Tolak</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-muted">Tidak ada pendaftaran yang menunggu persetujuan</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Semua Formulir User -->
+<div class="card">
+    <div class="card-header bg-secondary text-white">
+        <h4 class="mb-0">Semua Formulir Pendaftaran</h4>
+    </div>
+    <div class="card-body">
+        {% if all_forms %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Lengkap</th>
+                        <th>Nilai Rata-rata</th>
+                        <th>Status</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in all_forms %}
+                    <tr>
+                        <td>{{ form.nama }}</td>
+                        <td>{{ form.nilai_rata }}</td>
+                        <td>
+                            {% if form.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">Menunggu</span>
+                            {% elif form.status == 'accepted' %}
+                                <span class="badge bg-success">Diterima</span>
+                            {% elif form.status == 'rejected' %}
+                                <span class="badge bg-danger">Ditolak</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Tidak Diketahui</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('auth.view_formulir', user_id=form.user.id) }}" class="btn btn-info btn-sm">Lihat</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-muted">Belum ada formulir yang masuk</p>
+        {% endif %}
+    </div>
+</div>
     {% else %}
         <!-- User View -->
         <div class="card">
             <div class="card-header">
-                <h4 class="mb-0">My Application</h4>
+                <h4 class="mb-0">Formulir Pendaftaran</h4>
             </div>
             <div class="card-body">
                 {% if current_user.formulir %}
                     <div class="alert alert-info">
-                        Status: 
-                        {% if current_user.is_accepted == None %}
-                            <span class="badge bg-warning">Pending</span>
-                        {% elif current_user.is_accepted %}
-                            <span class="badge bg-success">Accepted</span>
-                        {% else %}
-                            <span class="badge bg-danger">Rejected</span>
+                        Status Pendaftaran: 
+                        {% if current_user.formulir.status == 'pending' %}
+                            <span class="badge bg-warning">Menunggu</span>
+                        {% elif current_user.formulir.status == 'accepted' %}
+                            <span class="badge bg-success">Diterima</span>
+                        {% elif current_user.formulir.status == 'rejected' %}
+                            <span class="badge bg-danger">Ditolak</span>
                         {% endif %}
                     </div>
-                    <a href="{{ url_for('auth.view_formulir') }}" class="btn btn-primary">View Form</a>
+                    <a href="{{ url_for('auth.view_formulir') }}" class="btn btn-primary">Lihat Formulir</a>
                 {% else %}
                     <div class="alert alert-warning">
-                        You haven't submitted your application form yet.
+                        Anda belum mengisi formulir pendaftaran.
                     </div>
-                    <a href="{{ url_for('auth.formulir') }}" class="btn btn-primary">Submit Form</a>
+                    <a href="{{ url_for('auth.formulir') }}" class="btn btn-primary">Isi Formulir</a>
                 {% endif %}
             </div>
         </div>
