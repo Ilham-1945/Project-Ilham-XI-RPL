@@ -1,91 +1,91 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+Semua perubahan penting pada proyek ini akan didokumentasikan dalam file ini.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Format berdasarkan [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+dan proyek ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-05-22
+## [1.0.0] - 22 Mei 2025
 
-### Added
-- Initial release of PPDB Online System
-- User authentication system (login/register)
-- Role-based access control (admin/user)
-- Online registration form with fields:
-  - Personal data (name, birth info, address)
-  - Academic data (school, grades)
-  - File upload for certificates
-- Admin dashboard features:
-  - Application statistics overview
-  - Review pending applications
-  - Accept/reject applications
-  - View all applications
-- User dashboard features:
-  - Registration progress tracking
-  - Application status monitoring
-  - Form preview
-  - Document upload
-- Modern UI/UX design with Bootstrap 5
-- Responsive layout for mobile devices
-- File upload system for certificates
-- Flash messages for user feedback
-- Secure password hashing
-- SQLite database integration
+### Ditambahkan
+- Rilis awal Sistem PPDB Online
+- Sistem autentikasi pengguna (login/register)
+- Kontrol akses berbasis peran (admin/pengguna)
+- Formulir pendaftaran online dengan field:
+  - Data pribadi (nama, info kelahiran, alamat)
+  - Data akademik (sekolah, nilai)
+  - Upload file ijazah
+- Fitur dashboard admin:
+  - Gambaran statistik pendaftaran
+  - Review pendaftaran yang menunggu
+  - Terima/tolak pendaftaran
+  - Lihat semua pendaftaran
+- Fitur dashboard pengguna:
+  - Pelacakan progres pendaftaran
+  - Monitoring status aplikasi
+  - Preview formulir
+  - Upload dokumen
+- Desain UI/UX modern dengan Bootstrap 5
+- Tata letak responsif untuk perangkat mobile
+- Sistem upload file untuk ijazah
+- Pesan flash untuk umpan balik pengguna
+- Enkripsi password yang aman
+- Integrasi database SQLite
 
-### Fixed
-- User session management
-- Form validation
-- File upload size restrictions
-- Admin access control
-- Database relationships
+### Diperbaiki
+- Manajemen sesi pengguna
+- Validasi formulir
+- Batasan ukuran file upload
+- Kontrol akses admin
+- Relasi database
 
-## [0.2.0] - 2025-05-15
+## [0.2.0] - 15 Mei 2025
 
-### Added
-- Admin dashboard interface
-- Application review system
-- Status tracking feature
-- File upload functionality
-- Progress indicators
-- Statistics cards
-- Quick action buttons
+### Ditambahkan
+- Antarmuka dashboard admin
+- Sistem review pendaftaran
+- Fitur pelacakan status
+- Fungsionalitas upload file
+- Indikator progres
+- Kartu statistik
+- Tombol aksi cepat
 
-### Changed
-- Improved form validation
-- Enhanced UI/UX design
-- Updated database schema
-- Restructured project files
+### Diubah
+- Peningkatan validasi formulir
+- Penyempurnaan desain UI/UX
+- Pembaruan skema database
+- Restrukturisasi file proyek
 
-### Fixed
-- Session handling bugs
-- Database relationship issues
-- Form submission errors
-- File upload validation
+### Diperbaiki
+- Bug penanganan sesi
+- Masalah relasi database
+- Error pengiriman formulir
+- Validasi upload file
 
-## [0.1.0] - 2025-05-01
+## [0.1.0] - 1 Mei 2025
 
-### Added
-- Basic user authentication
-- Simple registration form
-- Initial database setup
-- Basic templates
-- Project structure
+### Ditambahkan
+- Autentikasi pengguna dasar
+- Formulir pendaftaran sederhana
+- Pengaturan awal database
+- Template dasar
+- Struktur proyek
 
-### Changed
-- Updated dependencies
-- Improved error handling
-- Enhanced security features
+### Diubah
+- Pembaruan dependensi
+- Peningkatan penanganan error
+- Peningkatan fitur keamanan
 
-## [Unreleased]
+## [Akan Datang]
 
-### Planned
-- Export data to Excel
-- Print reports
-- Email notifications
-- Dashboard statistics
-- Batch processing
-- Advanced search filters
-- User profile management
-- Password reset functionality
-- Admin user management
-- System backup/restore
+### Direncanakan
+- Export data ke Excel
+- Cetak laporan
+- Notifikasi email
+- Statistik dashboard
+- Pemrosesan batch
+- Filter pencarian lanjutan
+- Manajemen profil pengguna
+- Fungsi reset password
+- Manajemen pengguna admin
+- Backup/restore sistem
