@@ -152,7 +152,7 @@ ppdb-smk-karya-bangsa/
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
-Project Link: [# PPDB Online SMK Karya Bangsa 2025/2026
+Project Link: (https://github.com/Ilham-1945/Project-Ilham-XI-RPL)
 
 ![Landing Page](app/static/images/dokumentasi/landing.png)
 
