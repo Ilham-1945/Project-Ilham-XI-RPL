@@ -169,6 +169,12 @@ def review_application(user_id):
         return redirect(url_for('auth.dashboard'))
 
     formulir = Formulir.query.filter_by(user_id=user_id).first_or_404()
+    
+    # Check if application has already been reviewed
+    if formulir.status != 'pending':
+        flash('This application has already been reviewed', 'warning')
+        return redirect(url_for('auth.dashboard'))
+
     action = request.form.get('action')
 
     if action == 'accept':
@@ -178,7 +184,12 @@ def review_application(user_id):
         formulir.status = 'rejected'
         flash('Application rejected', 'danger')
 
-    db.session.commit()
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
+        flash('Error updating application status', 'danger')
+
     return redirect(url_for('auth.dashboard'))
 
 @auth.route('/logout')

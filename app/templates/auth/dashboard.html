@@ -18,6 +18,7 @@
                         <th>Nama Lengkap</th>
                         <th>Jurusan</th>
                         <th>Nilai Rata-rata</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -28,14 +29,27 @@
                         <td>{{ form.jurusan }}</td>
                         <td>{{ form.nilai_rata }}</td>
                         <td>
-                            <form action="{{ url_for('auth.review_application', user_id=form.user.id) }}" method="POST" class="d-inline">
-                                <input type="hidden" name="action" value="accept">
-                                <button class="btn btn-success btn-sm">Terima</button>
-                            </form>
-                            <form action="{{ url_for('auth.review_application', user_id=form.user.id) }}" method="POST" class="d-inline ms-1">
-                                <input type="hidden" name="action" value="reject">
-                                <button class="btn btn-danger btn-sm">Tolak</button>
-                            </form>
+                            <span class="badge bg-warning text-dark">Menunggu</span>
+                        </td>
+                        <td>
+                            {% if form.status == 'pending' %}
+                                <div class="btn-group">
+                                    <form action="{{ url_for('auth.review_application', user_id=form.user.id) }}" method="POST" class="d-inline">
+                                        <input type="hidden" name="action" value="accept">
+                                        <button class="btn btn-success btn-sm">
+                                            <i class="fas fa-check"></i> Terima
+                                        </button>
+                                    </form>
+                                    <form action="{{ url_for('auth.review_application', user_id=form.user.id) }}" method="POST" class="d-inline ms-1">
+                                        <input type="hidden" name="action" value="reject">
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fas fa-times"></i> Tolak
+                                        </button>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <span class="text-muted">Sudah diproses</span>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -77,12 +91,12 @@
                                 <span class="badge bg-success">Diterima</span>
                             {% elif form.status == 'rejected' %}
                                 <span class="badge bg-danger">Ditolak</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Tidak Diketahui</span>
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ url_for('auth.view_formulir', user_id=form.user.id) }}" class="btn btn-info btn-sm">Lihat</a>
+                            <a href="{{ url_for('auth.view_formulir', user_id=form.user.id) }}" class="btn btn-info btn-sm">
+                                <i class="fas fa-eye"></i> Lihat
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}
